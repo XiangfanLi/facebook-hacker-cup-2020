@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+
+
+using namespace std;
+#define ll long long
+
+#define MAXN 1000010
+int T;
+int N;
+int K;
+ll As, Bs, Cs, Ax, Bx, Cx, Ay, By, Cy;
+ll Ds, Dx, Dy;
+ll S[MAXN];
+ll X[MAXN];
+ll Y[MAXN];
+
+int main()
+{
+	//freopen("capastaty_input.txt","r",stdin);
+	//freopen("A_output.txt","w",stdout);
+	cin>>T;
+	for(int t = 1; t <= T; ++t)
+	{
+		cin>>N>>K;
+		for(int i = 1; i <= K; ++i)
+		{
+			cin>>S[i];
+		}
+		cin>>As>>Bs>>Cs>>Ds;
+		for(int i = 1; i <= K; ++i)
+		{
+			cin>>X[i];
+		}
+		cin>>Ax>>Bx>>Cx>>Dx;
+		for(int i = 1; i <= K; ++i)
+			cin>>Y[i];
+		cin>>Ay>>By>>Cy>>Dy;
+		
+		for(int i = K + 1; i <= N; ++i)
+		{
+			S[i] = (As * S[i-2] + Bs * S[i-1] + Cs) % Ds;
+			X[i] = (Ax * X[i-2] + Bx * X[i-1] + Cx) % Dx;
+			Y[i] = (Ay * Y[i-2] + By * Y[i-1] + Cy) % Dy;
+		}
+		
+		ll min_sum = 0;
+		ll max_sum = 0;
+		ll sum = 0;
+		for(int i = 1; i <= N; ++i)
+		{
+			min_sum += X[i];
+			max_sum += (X[i] + Y[i]);
+			sum += S[i];
+		}
+		if(sum < min_sum || sum > max_sum)
+		{
+			cout<<"Case #"<<t<<": "<<-1<<endl;
+			continue;
+		}
+		ll dif1 = 0;
+		ll dif2 = 0;
+		for(int i = 1; i <= N; ++i)
+		{
+			if(S[i] < X[i])
+			{
+				dif1 += X[i] - S[i];
+			}
+			else if(S[i] > X[i] + Y[i])
+			{
+				dif2 += S[i] - (X[i] + Y[i]);
+			}
+		}
+		ll ans = max(dif1, dif2);
+		cout<<"Case #"<<t<<": "<<ans<<endl;
+	}
+} 
